@@ -1,0 +1,23 @@
+# Pycharm settings
+.idea
+
+# Virtual environment
+venv
+media
+*/migrations/*
+!*/migrations/__init__.py
+celerybeat-schedule
+celerybeat.pid
+*.sqlite3
+/venv1/
+*.log
+
+### Python template
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+.env.prod
+.env.prod.db
+
