@@ -31,6 +31,9 @@ services:
       - 1337:80
     depends_on:
       - web
+networks:
+  default:
+    driver: bridge
 volumes:
   postgres_data:
   static_volume:
