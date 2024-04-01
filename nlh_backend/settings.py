@@ -32,7 +32,7 @@ CSRF_TRUSTED_ORIGINS = ['http://*.130.211.94.133:1337', 'https://*.127.0.0.1']
 # Application definition
 
 INSTALLED_APPS = [
-    # 'django.contrib.admin',
+    'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
