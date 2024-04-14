@@ -7,7 +7,8 @@ from rest_framework.permissions import SAFE_METHODS, IsAuthenticated
 from .authentication import create_access_token, create_refresh_token, decode_access_token, decode_refresh_token
 from .serializers import UserSerializer
 from .models import User
-
+from django.utils.decorators import method_decorator
+from .middleware import AuthMiddleware
 
 class RegisterAPIView(APIView):
     def post(self, request):
@@ -27,33 +28,34 @@ class LoginAPIView(APIView):
         if not user.check_password(request.data['password']):
             raise APIException('Invalid credentials!')
 
-        access_token = create_access_token(user.id)
-        refresh_token = create_refresh_token(user.id)
+        # access_token = create_access_token(user.id)
+        # refresh_token = create_refresh_token(user.id)
 
-        response = Response()
+        # response = Response()
 
-        response.set_cookie(key='refreshToken', value=refresh_token, httponly=True)
-        response.data = {
-            'token': access_token
-        }
+        # response.set_cookie(key='refreshToken', value=refresh_token, httponly=True)
 
-        return response
+        return Response({'user_id': user.id})
 
 
+# @method_decorator(AuthMiddleware, name='dispatch')
 class UserAPIView(APIView):
-    permission_classes([IsAuthenticated])
     def get(self, request):
+        try:
+            user = User.objects.get(pk=request.data['user_id'])
+        except:
+            raise APIException('Unauthenticated')
+        # auth = get_authorization_header(request).split()
+        # if auth and len(auth) == 2:
+        #     token = auth[1].decode('utf-8')
+        #     id = decode_access_token(token)
 
-        auth = get_authorization_header(request).split()
+        #     user = User.objects.filter(pk=id).first()
+        
+        
+        return Response({'user': user.id})
 
-        if auth and len(auth) == 2:
-            token = auth[1].decode('utf-8')
-            id = decode_access_token(token)
-            user = User.objects.filter(pk=id).first()
-
-            return Response(UserSerializer(user).data)
-
-        return Response({'response': auth})
+        # raise AuthenticationFailed('unauthenticated')
 
 
 class RefreshAPIView(APIView):

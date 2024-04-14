@@ -4,18 +4,6 @@ from django.conf import settings
 from django.contrib.auth.models import User
 from rest_framework.authentication import TokenAuthentication
 
-class JSONWebTokenAuthentication(TokenAuthentication):
-    def authenticate_credentials(self, key):
-        try:
-            payload = jwt.decode(key, settings.SECRET_KEY)
-            user = User.objects.get(username=payload['username'])
-        except (jwt.DecodeError, User.DoesNotExist):
-            raise exceptions.AuthenticationFailed('Invalid token')
-        except jwt.ExpiredSignatureError:
-            raise exceptions.AuthenticationFailed('Token has expired')
-        if not user.is_active:
-            raise exceptions.AuthenticationFailed('User inactive or deleted')
-        return (user, payload)
 
 def create_access_token(id):
     return jwt.encode({
@@ -25,9 +13,10 @@ def create_access_token(id):
     }, 'access_secret', algorithm='HS256')
 
 def decode_access_token(token):
+    print('Decode '+token)
     try:
         payload = jwt.decode(token, 'access_secret', algorithms='HS256')
-
+        print('Decode '+ payload)
         return payload['user_id']
     except:
         raise exceptions.AuthenticationFailed('unauthenticated')
@@ -42,7 +31,7 @@ def create_refresh_token(id):
 def decode_refresh_token(token):
     try:
         payload = jwt.decode(token, 'refresh_secret', algorithms='HS256')
-
+        print(payload)
         return payload['user_id']
     except:
         raise exceptions.AuthenticationFailed('unauthenticated')
