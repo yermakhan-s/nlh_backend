@@ -1,5 +1,6 @@
 from django.contrib.auth.models import AbstractUser, BaseUserManager
 from django.db import models
+from django.core.validators import URLValidator
 
 
 class CustomUserManager(BaseUserManager):
@@ -28,6 +29,7 @@ class User(AbstractUser):
     username = models.CharField(max_length=255)
     email = models.EmailField(unique=True)
     password = models.CharField(max_length=255)
+    telegram_url = models.URLField(max_length=200, blank=True, null=True)
 
     first_name = None
     last_name = None
@@ -36,3 +38,9 @@ class User(AbstractUser):
     REQUIRED_FIELDS = []
 
     objects = CustomUserManager()
+
+    def __str__(self):
+        return self.username
+
+
+
