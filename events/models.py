@@ -9,6 +9,8 @@ class Club(models.Model):
     name = models.CharField(max_length=255)
     description = models.TextField(blank=True, null=True)
     image_url = models.FileField(null=True, blank=True)
+    def __str__(self):
+        return self.name
 
 
 class EventCategory(models.Model):
@@ -17,10 +19,10 @@ class EventCategory(models.Model):
         return self.name
 
 class Event(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
+    club = models.ForeignKey(Club, on_delete=models.CASCADE, null=True, blank=True, related_name='events')
     name = models.CharField(max_length=255)
     description = models.TextField(blank=True, null=True)
-    category = models.ForeignKey(EventCategory, on_delete=models.CASCADE, null=True, blank=True)
+    category = models.ForeignKey(EventCategory, on_delete=models.CASCADE, null=True, blank=True, related_name='events')
     image_url = models.FileField(null=True, blank=True)
     created_date = models.DateTimeField(auto_now_add=True, null=True)
     date = models.DateTimeField(null=True, blank=True)
