@@ -5,7 +5,7 @@ from authentication.models import User
 # Create your models here.
 
 class Club(models.Model):
-    members = models.ManyToManyField(User, related_name='clubs')
+    members = models.ManyToManyField(User, related_name='clubs', blank=True, null=True)
     name = models.CharField(max_length=255)
     description = models.TextField(blank=True, null=True)
     image_url = models.FileField(null=True, blank=True)
