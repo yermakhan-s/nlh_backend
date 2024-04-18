@@ -14,7 +14,7 @@ services:
       dockerfile: Dockerfile.prod
     command: gunicorn nlh_backend.wsgi:application --bind 0.0.0.0:8000 --reload && python manage.py makemigrations && python manage.py migrate
     volumes:
-      - .:/APP_HOME
+      - .:/home/app/web
       - static_volume:/home/app/web/staticfiles
       - media_volume:/home/app/web/mediafiles
     expose:
