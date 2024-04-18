@@ -12,7 +12,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile.prod
-    command: gunicorn nlh_backend.wsgi:application --bind 0.0.0.0:8000 --reload && python manage.py makemigrations && python manage.py migrate
+    command: gunicorn nlh_backend.wsgi:application --bind 0.0.0.0:8000 --reload
     volumes:
       - .:/home/app/web
       - static_volume:/home/app/web/staticfiles

@@ -11,8 +11,7 @@ from .authentication import create_access_token, create_refresh_token, decode_ac
 from .serializers import UserSerializer
 from .models import User
 from django.utils.decorators import method_decorator
-from .middleware import AuthMiddleware
-
+from .authentication import JWTAuthentication
 
 class RegisterAPIView(APIView):
     def post(self, request):
@@ -49,18 +48,9 @@ class LoginAPIView(APIView):
 
 # @method_decorator(AuthMiddleware, name='dispatch')
 class UserAPIView(APIView):
+    authentication_classes = [JWTAuthentication]
     def get(self, request):
-        auth = get_authorization_header(request).split()
-        print(auth)
-        if auth and len(auth) == 2:
-            token = auth[1].decode('utf-8')
-
-            id = decode_access_token(token)
-
-            user = User.objects.filter(pk=id).first()
-            return Response(UserSerializer(user).data)
-
-        raise PermissionDenied("Denied", code=403)
+        return Response(UserSerializer(request.user).data)
 
 
 class RefreshAPIView(APIView):
