@@ -26,5 +26,6 @@ class Event(models.Model):
     image_url = models.FileField(null=True, blank=True)
     created_date = models.DateTimeField(auto_now_add=True, null=True)
     date = models.DateTimeField(null=True, blank=True)
+    location = models.CharField(max_length=255, null=True, blank=True)
     def __str__(self):
         return self.name
