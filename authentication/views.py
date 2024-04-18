@@ -1,9 +1,12 @@
+import datetime
 from rest_framework.authentication import get_authorization_header
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from rest_framework.exceptions import APIException, AuthenticationFailed
+from rest_framework.exceptions import APIException, PermissionDenied
 from rest_framework.decorators import permission_classes
 from rest_framework.permissions import SAFE_METHODS, IsAuthenticated
+
+from authentication import exceptions
 from .authentication import create_access_token, create_refresh_token, decode_access_token, decode_refresh_token
 from .serializers import UserSerializer
 from .models import User
@@ -36,7 +39,7 @@ class LoginAPIView(APIView):
         response = Response()
 
         response.set_cookie(key='refreshToken',
-                            value=refresh_token, httponly=True)
+                            value=refresh_token, expires=datetime.datetime.now() + datetime.timedelta(days=7), httponly=True)
         response.data = {
             'access_token': access_token
         }
@@ -57,7 +60,7 @@ class UserAPIView(APIView):
             user = User.objects.filter(pk=id).first()
             return Response(UserSerializer(user).data)
 
-        return Response({"message": auth})
+        raise PermissionDenied("Denied", code=403)
 
 
 class RefreshAPIView(APIView):

@@ -8,26 +8,28 @@ from .authentication import create_access_token, create_refresh_token, decode_ac
 from .serializers import UserSerializer
 from .models import User
 
+
 class AuthMiddleware:
-  def __init__(self, get_response):
-    self.get_response = get_response
-    # One-time configuration and initialization.
 
-  def __call__(self, request):
-    # Code to be executed for each request before
-    # the view (and later middleware) are called.
-    auth = get_authorization_header(request).split()
-    user = None
-    if auth and len(auth) == 2:
-      token = auth[1].decode('utf-8')
-      id = decode_access_token(token)
-      request.session['user_id'] = user.id
-  
-    # request.user = user
+    def __init__(self, get_response):
+        self.get_response = get_response
+        # One-time configuration and initialization.
 
-    response = self.get_response(request)
+    def __call__(self, request):
+        # Code to be executed for each request before
+        # the view (and later middleware) are called.
+        auth = get_authorization_header(request).split()
+        user = None
+        if auth and len(auth) == 2:
+            token = auth[1].decode('utf-8')
+            id = decode_access_token(token)
+            request.session['user_id'] = user.id
 
-    # Code to be executed for each request/response after
-    # the view is called.
+        # request.user = user
 
-    return response
+        response = self.get_response(request)
+
+        # Code to be executed for each request/response after
+        # the view is called.
+
+        return response
