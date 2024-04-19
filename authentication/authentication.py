@@ -5,7 +5,6 @@ from rest_framework.response import Response
 from rest_framework.authentication import BaseAuthentication, get_authorization_header
 from .models import User
 
-
 class JWTAuthentication(BaseAuthentication):
     def authenticate(self, request):
         print(request.headers)
@@ -15,11 +14,13 @@ class JWTAuthentication(BaseAuthentication):
             token = auth[1].decode('utf-8')
             id = decode_access_token(token)
 
-            user = User.objects.get(pk=id)
+            try:
+                user = User.objects.get(pk=id)
+            except:
+                raise exceptions.AuthenticationFailed('jwt unauthenticated')
 
             return (user, None)
         raise exceptions.AuthenticationFailed('jwt unauthenticated')
-
 
 def create_access_token(id):
     return jwt.encode({
