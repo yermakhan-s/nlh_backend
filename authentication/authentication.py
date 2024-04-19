@@ -4,6 +4,7 @@ from rest_framework import exceptions
 from rest_framework.response import Response
 from rest_framework.authentication import BaseAuthentication, get_authorization_header
 from .models import User
+from django.http.response import HttpResponse, HttpResponseForbidden
 
 class JWTAuthentication(BaseAuthentication):
     def authenticate(self, request):
@@ -14,7 +15,10 @@ class JWTAuthentication(BaseAuthentication):
             token = auth[1].decode('utf-8')
             id = decode_access_token(token)
 
-            user = User.objects.get(pk=id)
+            try:
+                user = User.objects.get(pk=id)
+            exceptions:
+                raise exceptions.AuthenticationFailed('jwt unauthenticated')
 
             return (user, None)
         raise exceptions.AuthenticationFailed('jwt unauthenticated')
@@ -50,4 +54,4 @@ def decode_refresh_token(token):
         print(payload)
         return payload['user_id']
     except:
-        raise exceptions.NotAuthenticated('unauthenticated')
+        return HttpResponse('Unauthorized', status=401)
