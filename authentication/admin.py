@@ -17,7 +17,7 @@ class CustomUserAdmin(UserAdmin):
         (None, {
             "classes": ("wide",),
             "fields": (
-                "email", "username", "telegram_url", "password1", "password2", "is_staff",
+                "email", "username", "telegram_url", 'avatar_url', "password1", "password2", "is_staff",
                 "is_active", "groups", "user_permissions"
             )}
          ),
