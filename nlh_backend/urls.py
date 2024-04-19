@@ -19,10 +19,12 @@ from django.urls import path, include
 from rest_framework.routers import DefaultRouter
 from marketplace.urls import router as auth_router
 from events.urls import router as event_router
+from vacancies.urls import router as vacancy_router
 
 router = DefaultRouter()
 router.registry.extend(auth_router.registry)
 router.registry.extend(event_router.registry)
+router.registry.extend(vacancy_router.registry)
 
 
 urlpatterns = [

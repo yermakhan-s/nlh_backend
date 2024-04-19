@@ -60,7 +60,7 @@ class RefreshAPIView(APIView):
     def post(self, request):
         refresh_token = request.COOKIES.get('refreshToken')
         if not refresh_token:
-            return HttpResponse('here', status=401)
+            return HttpResponse('not refresh token', status=401)
         id = decode_refresh_token(refresh_token)
         access_token = create_access_token(id)
         return Response({
