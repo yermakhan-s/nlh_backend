@@ -17,7 +17,7 @@ class JWTAuthentication(BaseAuthentication):
 
             try:
                 user = User.objects.get(pk=id)
-            exceptions:
+            except:
                 raise exceptions.AuthenticationFailed('jwt unauthenticated')
 
             return (user, None)
