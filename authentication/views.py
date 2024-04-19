@@ -1,4 +1,5 @@
 import datetime
+from django.http import HttpResponse
 from rest_framework.authentication import get_authorization_header
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -12,6 +13,7 @@ from .serializers import UserSerializer
 from .models import User
 from django.utils.decorators import method_decorator
 from .authentication import JWTAuthentication
+
 
 class RegisterAPIView(APIView):
     def post(self, request):
@@ -49,6 +51,7 @@ class LoginAPIView(APIView):
 # @method_decorator(AuthMiddleware, name='dispatch')
 class UserAPIView(APIView):
     authentication_classes = [JWTAuthentication]
+
     def get(self, request):
         return Response(UserSerializer(request.user).data)
 
@@ -56,6 +59,8 @@ class UserAPIView(APIView):
 class RefreshAPIView(APIView):
     def post(self, request):
         refresh_token = request.COOKIES.get('refreshToken')
+        if not refresh_token:
+            return HttpResponse('here', status=401)
         id = decode_refresh_token(refresh_token)
         access_token = create_access_token(id)
         return Response({
