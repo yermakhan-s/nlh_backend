@@ -11,6 +11,7 @@ class VacancyViewSet(ModelViewSet):
     serializer_class = VacancySerializer
     queryset = Vacancy.objects.all()
     authentication_classes = [JWTAuthentication]
+    filterset_fields=['category_id', 'user_id']
     @action(methods=['get'], detail=False)
     def get_vacancy_categories(self, request, *args, **kwargs):
         categories = VacancyCategory.objects.all()
