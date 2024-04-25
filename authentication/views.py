@@ -9,11 +9,12 @@ from rest_framework.permissions import SAFE_METHODS, IsAuthenticated
 
 from authentication import exceptions
 from .authentication import create_access_token, create_refresh_token, decode_access_token, decode_refresh_token
-from .serializers import UserSerializer
+from .serializers import UserSerializer, UserViewSetSerializer
 from .models import User
 from django.utils.decorators import method_decorator
 from .authentication import JWTAuthentication
 
+from rest_framework.viewsets import ModelViewSet
 
 class RegisterAPIView(APIView):
     def post(self, request):
@@ -41,8 +42,13 @@ class LoginAPIView(APIView):
 
         response.set_cookie(key='refreshToken',
                             value=refresh_token, expires=datetime.datetime.now() + datetime.timedelta(days=7), httponly=True)
+        serializer = UserSerializer(user)
+    
+
         response.data = {
-            'access_token': access_token
+            'access_token': access_token,
+            'user_data': serializer.data
+            
         }
 
         return response
@@ -76,3 +82,10 @@ class LogoutAPIView(APIView):
             'message': 'success'
         }
         return response
+
+
+class UserViewSet(ModelViewSet):
+    serializer_class = UserViewSetSerializer
+    queryset = User.objects.all()
+    authentication_classes = [JWTAuthentication]
+    # filterset_fields=['category_id', 'user_id']

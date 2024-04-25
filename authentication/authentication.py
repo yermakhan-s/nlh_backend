@@ -1,5 +1,6 @@
 import jwt
 import datetime
+from django.utils import timezone
 from rest_framework import exceptions
 from rest_framework.response import Response
 from rest_framework.authentication import BaseAuthentication, get_authorization_header
@@ -25,8 +26,8 @@ class JWTAuthentication(BaseAuthentication):
 def create_access_token(id):
     return jwt.encode({
         'user_id': id,
-        'exp': datetime.datetime.now() + datetime.timedelta(days=5),
-        'iat': datetime.datetime.now()
+        'exp': timezone.localtime(timezone.now()) + datetime.timedelta(days=7),
+        'iat': timezone.localtime(timezone.now())
     }, 'access_secret', algorithm='HS256')
 
 
@@ -42,8 +43,8 @@ def decode_access_token(token):
 def create_refresh_token(id):
     return jwt.encode({
         'user_id': id,
-        'exp': datetime.datetime.now() + datetime.timedelta(days=7),
-        'iat': datetime.datetime.now()
+        'exp': timezone.localtime(timezone.now()) + datetime.timedelta(days=100),
+        'iat': timezone.localtime(timezone.now())
     }, 'refresh_secret', algorithm='HS256')
 
 

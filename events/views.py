@@ -11,7 +11,7 @@ class EventViewSet(ModelViewSet):
     serializer_class = EventSerializer
     queryset = Event.objects.all()
     authentication_classes = [JWTAuthentication]
-    filterset_fields=['category_id', 'club_id']
+    filterset_fields=['category_id', 'club_id', 'date']
     @action(methods=['get'], detail=False)
     def get_event_categories(self, request, *args, **kwargs):
         categories = EventCategory.objects.all()
