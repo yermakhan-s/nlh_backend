@@ -18,7 +18,7 @@ from rest_framework.viewsets import ModelViewSet
 
 class RegisterAPIView(APIView):
     def post(self, request):
-        serializer = UserSerializer(data=request.data)
+        serializer = UserSerializer(data=request.data, context={'request': request})
         serializer.is_valid(raise_exception=True)
         serializer.save()
         return Response(serializer.data)
@@ -42,7 +42,7 @@ class LoginAPIView(APIView):
 
         response.set_cookie(key='refreshToken',
                             value=refresh_token, expires=datetime.datetime.now() + datetime.timedelta(days=7), httponly=True)
-        serializer = UserSerializer(user)
+        serializer = UserSerializer(user, context={'request': request})
     
 
         response.data = {
