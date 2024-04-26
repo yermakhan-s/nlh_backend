@@ -8,7 +8,7 @@ class UserSerializer(ModelSerializer):
 
     def get_avatar(self, obj):
         if obj.avatar_url:
-            return self.context['request'].build_absolute_uri(obj.avatar_url)
+            return self.context['request'].build_absolute_uri(obj.avatar_url.url)
 
     class Meta:
         model = User
