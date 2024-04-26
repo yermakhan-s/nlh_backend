@@ -18,6 +18,13 @@ class EventViewSet(ModelViewSet):
     filterset_fields=['category_id', 'club_id', 'date__date']
     search_fields = ['name', 'description']
 
+    def get_queryset(self):
+        queryset = Event.objects.all()
+        date_str = self.request.query_params.get('date')
+        if date_str is not None:
+            queryset = queryset.filter(date__date=date_str)
+        return queryset
+
     @action(methods=['get'], detail=False)
     def get_event_categories(self, request, *args, **kwargs):
         categories = EventCategory.objects.all()
