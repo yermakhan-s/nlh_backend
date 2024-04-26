@@ -14,7 +14,7 @@ class EventViewSet(ModelViewSet):
     queryset = Event.objects.all()
     authentication_classes = [JWTAuthentication]
     filter_backends = [filters.SearchFilter, DjangoFilterBackend]
-    filterset_fields=['category_id', 'club_id', 'date']
+    filterset_fields=['category_id', 'club_id', 'date_date']
     search_fields = ['name', 'description']
 
     @action(methods=['get'], detail=False)
