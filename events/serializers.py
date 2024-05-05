@@ -16,8 +16,8 @@ class ClubNestedSerializer(serializers.ModelSerializer):
         fields = ('id', 'name', 'image_url') 
 class EventSerializer(ModelSerializer):
     club = ClubNestedSerializer()
-    date = serializers.DateTimeField(format='%Y-%m-%d %H:%M')
-    created_date = serializers.DateTimeField(format='%Y-%m-%d %H:%M')
+    date = serializers.DateTimeField(format='%Y-%m-%d %H:%M', required=False)
+    created_date = serializers.DateTimeField(format='%Y-%m-%d %H:%M', read_only=True)
     class Meta:
         model = Event
         fields = '__all__'

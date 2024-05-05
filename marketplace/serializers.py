@@ -10,7 +10,7 @@ class UserNestedSerializer(ModelSerializer):
         fields = ('id', 'username', 'avatar_url', 'telegram_url')
 class ItemSerializer(ModelSerializer):
     user = UserNestedSerializer()
-    created_date = serializers.DateTimeField(format='%Y-%m-%d %H:%M')
+    created_date = serializers.DateTimeField(format='%Y-%m-%d %H:%M', read_only=True)
     class Meta:
         model = Item
         fields = '__all__'
