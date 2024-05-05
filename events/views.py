@@ -7,6 +7,8 @@ from .serializers import EventSerializer, EventCategorySerializer, ClubSerialize
 from rest_framework.decorators import action
 from rest_framework import filters
 from django_filters.rest_framework import DjangoFilterBackend
+from django.db.models import Count
+from datetime import datetime
 from authentication.authentication import JWTAuthentication
 from datetime import datetime
 
@@ -30,6 +32,15 @@ class EventViewSet(ModelViewSet):
         categories = EventCategory.objects.all()
         serializer = EventCategorySerializer(categories, many=True)
         return Response(serializer.data)
+    
+    @action(methods=['get'], detail=False)
+    def get_event_count_by_date(self, request, *args, **kwargs):
+        events_by_date = Event.objects.values('date__date').annotate(count=Count('id'))
+        event_count_by_date = {}
+        for event in events_by_date:
+            date_str = event['date__date'].strftime('%Y-%m-%d')
+            event_count_by_date[date_str] = event['count']
+        return Response(event_count_by_date)
 
 class ClubViewSet(ModelViewSet):
     serializer_class = ClubSerializer

@@ -16,5 +16,6 @@ class Vacancy(models.Model):
     category = models.ForeignKey(VacancyCategory, on_delete=models.CASCADE, null=True, blank=True, related_name='vacancies')
     image_url = models.FileField(null=True, blank=True)
     created_date = models.DateTimeField(auto_now_add=True, null=True)
+    
     def __str__(self):
         return self.name

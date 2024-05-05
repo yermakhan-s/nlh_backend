@@ -1,9 +1,23 @@
 from rest_framework import serializers
-from rest_framework.serializers import ModelSerializer, Serializer
+from rest_framework.serializers import ModelSerializer, Serializer, SerializerMethodField
 
 from .models import Event, EventCategory, Club
 
+
+class ClubSerializer(ModelSerializer):
+    class Meta:
+        model = Club
+        fields = '__all__'
+
+
+class ClubNestedSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Club
+        fields = ('id', 'name', 'image_url') 
 class EventSerializer(ModelSerializer):
+    club = ClubNestedSerializer()
+    date = serializers.DateTimeField(format='%Y-%m-%d %H:%M')
+    created_date = serializers.DateTimeField(format='%Y-%m-%d %H:%M')
     class Meta:
         model = Event
         fields = '__all__'
@@ -11,9 +25,4 @@ class EventSerializer(ModelSerializer):
 class EventCategorySerializer(ModelSerializer):
     class Meta:
         model = EventCategory
-        fields = '__all__'
-
-class ClubSerializer(ModelSerializer):
-    class Meta:
-        model = Club
         fields = '__all__'
