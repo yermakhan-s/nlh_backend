@@ -9,7 +9,7 @@ class UserNestedSerializer(ModelSerializer):
         model = User
         fields = ('id', 'username', 'avatar_url', 'telegram_url')
 class VacancySerializer(ModelSerializer):
-    user = UserNestedSerializer()
+    user = UserNestedSerializer(read_only=True)
     created_date = serializers.DateTimeField(format='%Y-%m-%d %H:%M',read_only=True)
     class Meta:
         model = Vacancy
